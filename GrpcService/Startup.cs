@@ -1,4 +1,6 @@
-﻿using DAL.EF;
+﻿using BLL.Interfaces;
+using BLL.Services;
+using DAL.EF;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,15 +12,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GrpcService.AutoMapper;
 
 namespace GrpcService
 {
     //https://medium.com/@jnewmano/grpc-postman-173b62a64341 //does not fit 
     //https://docs.microsoft.com/ru-ru/aspnet/core/grpc/test-tools?view=aspnetcore-5.0
-    //https://github.com/fullstorydev/grpcui#installation //does not work
+    //https://github.com/fullstorydev/grpcui#installation //its work
     //https://github.com/fullstorydev/grpcurl //its work
-    //https://github.com/uw-labs/bloomrpc
-    //https://www.youtube.com/watch?v=DNxdvRQ4qRQ
+    //https://github.com/uw-labs/bloomrpc //does not work
+    //https://www.youtube.com/watch?v=DNxdvRQ4qRQ //usefully video about gRPC
+    //https://grpc.io/docs/languages/csharp/basics/
+    //https://grpc.github.io/grpc/csharp-dotnet/api/Grpc.AspNetCore.Server.Model.html
+    //https://developers.google.com/protocol-buffers/docs/proto3#simple
+    //https://docs.microsoft.com/ru-ru/aspnet/core/grpc/protobuf?view=aspnetcore-5.0 //datatype proto and c#
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -37,6 +44,10 @@ namespace GrpcService
 
             services.AddDbContext<AppDBContext>(options => options.
                 UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 26))), ServiceLifetime.Transient);
+            
+            services.AddAutoMapper(typeof(AutoMapperProfile));
+
+            services.AddScoped<IProductService, BLL.Services.ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
