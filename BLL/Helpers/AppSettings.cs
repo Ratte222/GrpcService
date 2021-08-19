@@ -6,11 +6,9 @@ namespace BLL.Helpers
 {
     public class AppSettings
     {
-        public string DirectoryForSerializeDeserialize { get; set; }
-        public string FileName { get; set; }
-        public string DirectoryForFireBaseConfig { get; set; }
-        public Dictionary<string, string> FireBaseConfig { get; set; }
-        public Dictionary<string, string> ExternLibConfig {  get; set;}
-        public string ProxyListFileName {  get; set; }
+        public string Issuer { get; set; }    
+        public string Audience { get; set; }  
+        public int Lifetime { get; set; }     
+        public string Secret { get; set; }    
     }
 }

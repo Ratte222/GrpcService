@@ -41,7 +41,7 @@ message ProductsReply {
   PageResponse PageResponse = 1;
   repeated ProductProto Products = 2; 
 }
-
+//https://stackoverflow.com/questions/10235854/how-to-serialize-net-exceptions-using-protobuf-net
 message NewProductProto
 {
   string Name = 1;

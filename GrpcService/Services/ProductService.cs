@@ -10,6 +10,7 @@ using model = DAL.Model;
 using BLL.Filters;
 using BLL.Helpers;
 using BLL.DTO.Product;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GrpcService//.Services
 {
@@ -40,6 +41,7 @@ namespace GrpcService//.Services
             return Task.FromResult(_mapper.Map<model.Product, ProductProto>(product));
         }
 
+        [Authorize]
         public override Task<ProductsReply> GetProducts(ProductsRequest request, ServerCallContext context)
         {
             PageResponse<model.Product> pageResponse = new PageResponse<model.Product>(

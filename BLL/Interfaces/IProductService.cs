@@ -20,10 +20,6 @@ namespace BLL.Interfaces
         void Delete(long id);
 
 
-        void Serialize(ProductDTO product);
-        List<ProductDTO> Deserialize();
-
-        Task InsertNewProductToFireBaseAsync(List<ProductFbDTO> products);
-        Task<List<ProductFbDTO>> GetDataFromFireBase(PageResponse<ProductFbDTO> pageResponse, ProductFilter productFilter);
+        
     }
 }

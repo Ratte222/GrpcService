@@ -2,12 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using DAL.Model;
+using Microsoft.AspNetCore.Identity;
 
 namespace DAL.EF
 {
     public static class DbInitializer
     {
-        public static void Initialize(AppDBContext db)
+        public static void Initialize(AppDBContext db, UserManager<User> userManager)
         {
             if(!db.OrderLines.Any() || !db.OrderLines.Any())
             {
@@ -41,6 +42,19 @@ namespace DAL.EF
                 };
                 db.OrderLines.AddRange(orderLine, orderLine1, orderLine2);
                 db.SaveChanges();
+            }
+            if (userManager.Users.FirstOrDefault() == null)
+            {
+                User user = new User()
+                {
+                    FirstName = "Nik",
+                    LastName = "Bahovez",
+                    Email = "Bahovez123@gmail.com",
+                    UserName = "NBA"
+                };
+                var resulr = userManager.CreateAsync(user, "aZ12345678*").GetAwaiter().GetResult();
+                if(!resulr.Succeeded)
+                    throw new Exception("Create user failed");
             }
         }
     }
