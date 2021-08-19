@@ -74,7 +74,7 @@ namespace BLL.Services
             _context.Database.ExecuteSqlRaw(query);
         }
 
-        public IEnumerable<Product> GetProducts(PageResponse<ProductDTO> pageResponse, ProductFilter productFilter)
+        public IEnumerable<Product> GetProducts(PageResponse<Product> pageResponse, ProductFilter productFilter)
         {
             var query = GetAll();
             if (String.IsNullOrEmpty(productFilter.FieldOrderBy))

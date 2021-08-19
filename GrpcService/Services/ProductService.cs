@@ -26,7 +26,7 @@ namespace GrpcService//.Services
             _mapper = mapper;
         }
 
-        public override Task<ProductReply> GetProduct(ProductRequest request, ServerCallContext context)
+        public override Task<ProductProto> GetProduct(ProductRequest request, ServerCallContext context)
         {
             model.Product product = _productService.Get(request.ProductId);
             //var result = new ProductReply
@@ -37,22 +37,41 @@ namespace GrpcService//.Services
             //    Cost = product.Cost
             //};
             //return Task.FromResult(result);
-            return Task.FromResult(_mapper.Map<model.Product, ProductReply>(product));
+            return Task.FromResult(_mapper.Map<model.Product, ProductProto>(product));
         }
 
         public override Task<ProductsReply> GetProducts(ProductsRequest request, ServerCallContext context)
         {
-            PageResponse<ProductDTO> pageResponse = new PageResponse<ProductDTO>(
+            PageResponse<model.Product> pageResponse = new PageResponse<model.Product>(
                 request.PageLength, request.PageNumber);
             ProductFilter productFilter = new ProductFilter()
             {
                 FieldOrderBy = request.FieldOrderBy,
                 OrderByDescending = request.OrderByDescending == null ? false : true
             };
-            List<ProductReply> list = _mapper.ProjectTo<ProductReply>(_productService.GetAll()).ToList();
+            List<ProductProto> list = _mapper.ProjectTo<ProductProto>(_productService.GetAll()).ToList();
             ProductsReply reply = new ProductsReply();
+            reply.PageResponse = _mapper.Map<PageResponse<model.Product>, PageResponse>(pageResponse);
             reply.Products.AddRange(list);
             return Task.FromResult(reply);
+        }
+
+        public override Task<StringReply> CreateProduct(NewProductProto request, ServerCallContext context)
+        {
+            _productService.Create(_mapper.Map<NewProductProto, model.Product>(request));
+            return Task.FromResult(new StringReply { Message = "Product created successfully" });
+        }
+
+        public override Task<StringReply> EditProduct(ProductProto request, ServerCallContext context)
+        {
+            _productService.Update(_mapper.Map<ProductProto, model.Product>(request));
+            return Task.FromResult(new StringReply { Message = "Product updated successfully" });
+        }
+
+        public override Task<StringReply> DeleteProduct(ProductRequest request, ServerCallContext context)
+        {
+            _productService.Delete(request.ProductId);
+            return Task.FromResult(new StringReply { Message = "Product removed successfully"});
         }
     }
 }

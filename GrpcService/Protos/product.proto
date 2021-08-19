@@ -9,8 +9,11 @@ package product;
 // The greeting service definition.
 service Product {
   // Sends a greeting
-  rpc GetProduct (ProductRequest) returns (ProductReply);
+  rpc GetProduct (ProductRequest) returns (ProductProto);
   rpc GetProducts (ProductsRequest) returns (ProductsReply);
+  rpc CreateProduct (NewProductProto) returns (StringReply);
+  rpc EditProduct (ProductProto) returns (StringReply);
+  rpc DeleteProduct (ProductRequest) returns (StringReply);
 }
 
 // The request message containing the user's name.
@@ -19,7 +22,7 @@ message ProductRequest {
 }
 
 // The response message containing the greetings.
-message ProductReply {
+message ProductProto {
   int64 Id = 1;
   string Name = 2;
   string Description = 3;
@@ -35,5 +38,27 @@ message ProductsRequest {
 }
 
 message ProductsReply {
-  repeated ProductReply Products = 1; 
+  PageResponse PageResponse = 1;
+  repeated ProductProto Products = 2; 
+}
+
+message NewProductProto
+{
+  string Name = 1;
+  string Description = 2;
+  double Cost = 3;
+}
+
+message StringReply
+{
+	string Message = 1;
+}
+
+message PageResponse
+{
+  int32 PageLength = 1;
+  int32 PageNumber = 2;
+  int32 TotalItems = 3;
+  int32 TotalPages = 4;
+  int32 ItemCount = 5;
 }

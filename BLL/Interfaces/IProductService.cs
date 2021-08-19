@@ -14,7 +14,7 @@ namespace BLL.Interfaces
     {
         IQueryable<Product> GetAll();
         Product Get(long id);
-        IEnumerable<Product> GetProducts(PageResponse<ProductDTO> pageResponse, ProductFilter productFilter);
+        IEnumerable<Product> GetProducts(PageResponse<Product> pageResponse, ProductFilter productFilter);
         void Create(Product item);
         void Update(Product item);
         void Delete(long id);
