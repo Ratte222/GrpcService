@@ -26,6 +26,22 @@ namespace GrpcService
             _appSettings = appSettings;
         }
 
+        public override async Task<RegistrationReply> Registration(RegistrationRequest request, ServerCallContext context)
+        {
+            User user = new User { Email = request.Email, UserName = request.UserName,
+                FirstName = request.FirstName, LastName = request.LastName };
+            // add new user
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (result.Succeeded)
+            {
+                return new RegistrationReply() { Message = "Registration successful" };
+            }
+            else
+            {
+                return new RegistrationReply() { Message = result.Errors.FirstOrDefault().Code};
+            }            
+        }
+
         public override async Task<LoginReply> Login(LoginRequest request, ServerCallContext context)
         {
             User user = await _userManager.FindByNameAsync(request.EmailOrUserName);
