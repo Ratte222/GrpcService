@@ -9,6 +9,7 @@ namespace DAL.EF
 {
     public class AppDBContext : IdentityDbContext
     {
+        public DbSet<ProductPhoto> ProductPhotos { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<OrderLine> OrderLines {  get; set; }
@@ -24,6 +25,13 @@ namespace DAL.EF
             modelBuilder.Entity<OrderLine>(m =>
             {
                 m.HasKey(i => i.Id);
+            });
+            modelBuilder.Entity<ProductPhoto>(m =>
+            {
+                m.HasKey(i => i.Id);
+                m.HasOne(i => i.Product)
+                .WithMany(j => j.ProductPhotos)
+                .HasForeignKey(i => i.ProductId);
             });
         }
     }

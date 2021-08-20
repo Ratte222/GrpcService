@@ -11,7 +11,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace GrpcService
+namespace GrpcService.Services
 {
     public class AccountService : Account.AccountBase
     {
@@ -26,7 +26,7 @@ namespace GrpcService
             _appSettings = appSettings;
         }
 
-        public override async Task<RegistrationReply> Registration(RegistrationRequest request, ServerCallContext context)
+        public override async Task<Google.Rpc.Status> Registration(RegistrationRequest request, ServerCallContext context)
         {
             User user = new User { Email = request.Email, UserName = request.UserName,
                 FirstName = request.FirstName, LastName = request.LastName };
@@ -34,40 +34,45 @@ namespace GrpcService
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                return new RegistrationReply() { Message = "Registration successful" };
+                return new Google.Rpc.Status() { Message = "Registration successful",
+                    Code = (int)StatusCode.OK};
             }
             else
             {
-                return new RegistrationReply() { Message = result.Errors.FirstOrDefault().Code};
+                return new Google.Rpc.Status() { Message = result.Errors.FirstOrDefault().Code,
+                    Code = (int)StatusCode.Internal
+                };
             }            
         }
 
         public override async Task<LoginReply> Login(LoginRequest request, ServerCallContext context)
         {
+            LoginReply loginReply = new LoginReply();
             User user = await _userManager.FindByNameAsync(request.EmailOrUserName);
             if(user == null)
             {
                 user = await _userManager.FindByEmailAsync(request.EmailOrUserName);
             }
-            //if (user == null)
-            //    return Task.FromResult(new LoginReply() { });
+            if (user == null)
+            {
+                loginReply.Status.Code = (int)StatusCode.NotFound;
+                return loginReply;
+            }                
             if (await _userManager.CheckPasswordAsync(
                 user, request.Password))
-            {
-                //if (!user.EmailConfirmed)
-                    //return BadRequest("Please, confirm e-mail");
-                LoginReply loginReply = new LoginReply()
-                {
-                    Token = CreateJWT(GetIdentity(new List<Claim>() {
-                        new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id)
-                    })),
-                    UserName = user.UserName
-                };
+            {                
+                loginReply.Token = CreateJWT(GetIdentity(new List<Claim>() {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id)
+                }));
+                loginReply.UserName = user.UserName;
+                
                 return loginReply;
             }
             else
             {
-                return new LoginReply();//"Wrong password or userName "
+                loginReply.Status.Code = (int)StatusCode.InvalidArgument;
+                loginReply.Status.Message = "Wrong password or userName ";
+                return loginReply;
             }            
         }
 

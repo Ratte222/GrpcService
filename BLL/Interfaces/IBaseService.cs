@@ -15,7 +15,7 @@ namespace BLL.Interfaces
         T Get(long id);
         Task<T> GetAsync(long id);
         void Create(T item);
-        //void CreateRange(IEnumerable<T> items);
+        Task CreateRangeAsync(IEnumerable<T> items);
         void Update(T item);
         void Delete(T item);
     }

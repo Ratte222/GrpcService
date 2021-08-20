@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\AuxiliaryLib\AuxiliaryLib.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="ML\CatVsDogClassifier.zip">

@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using BLL.Helpers;
 using Microsoft.AspNetCore.Identity;
 using DAL.Model;
+using GrpcService.Services;
 
 namespace GrpcService
 {
@@ -145,6 +146,7 @@ namespace GrpcService
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddScoped<IProductService, BLL.Services.ProductService>();
+            services.AddScoped<IProductPhotoService, BLL.Services.ProductPhotoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -167,7 +169,9 @@ namespace GrpcService
             {
                 endpoints.MapGrpcService<GreeterService>();
                 endpoints.MapGrpcService<AccountService>();
-                endpoints.MapGrpcService<ProductService>();
+                endpoints.MapGrpcService<GrpcService.Services.ProductService>();
+                endpoints.MapGrpcService<GrpcService.Services.ProductPhotoService>();
+                endpoints.MapGrpcService<FileService>();
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");

@@ -47,7 +47,11 @@ namespace BLL.Services
             _context.Set<T>().Add(model);
             _context.SaveChanges();
         }
-
+        public virtual async Task CreateRangeAsync(IEnumerable<T> items)
+        {
+            await _context.Set<T>().AddRangeAsync(items);
+            await _context.SaveChangesAsync();
+        }
         public virtual void CreateRange(IEnumerable<T> items)
         {
             _context.Set<T>().AddRange(items);

@@ -13,5 +13,7 @@ namespace DAL.Model
         [Required]
         [Range(0.0,double.MaxValue)]
         public double Cost { get; set; }
+
+        public ICollection<ProductPhoto> ProductPhotos { get; set; }
     }
 }

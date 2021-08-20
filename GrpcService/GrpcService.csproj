@@ -6,11 +6,14 @@
 
   <ItemGroup>
     <None Remove="Protos\account.proto" />
+    <None Remove="Protos\file.proto" />
   </ItemGroup>
 
   <ItemGroup>
     <Protobuf Include="Protos\account.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\file.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\product_photo.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\product.proto" GrpcServices="Server" />
   </ItemGroup>
 
@@ -29,6 +32,10 @@
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj" />
     <ProjectReference Include="..\DAL\DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Temp\" />
   </ItemGroup>
 
 </Project>

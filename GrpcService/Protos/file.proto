@@ -1,0 +1,32 @@
+﻿syntax = "proto3";
+//https://stackoverflow.com/questions/60661438/c-sharp-grpc-file-streaming-original-file-smaller-than-the-streamed-one
+//https://github.com/lisa3907/grpc.fileTransfer
+//import "Protos/common.proto";
+option csharp_namespace = "GrpcService";
+
+package file;
+
+//service Service{
+//  rpc updload(stream Data) returns (google.protobuf.Empty) {};
+//  rpc download(google.protobuf.Empty) returns (stream Data) {};
+//}
+
+//message Data { bytes bytes = 1; }
+
+service FileTransferService {  
+    rpc DownloadFile(FileRequest) returns (stream ChunkMsg);
+}  
+
+message ChunkMsg {
+    string FileName = 1;
+    int64 FileSize = 2;
+
+    int32 ChunkSize = 3;
+    bytes Chunk = 4;
+
+    bool IsCanceled = 5;
+}
+
+message FileRequest {
+    string FilePath = 1;
+}

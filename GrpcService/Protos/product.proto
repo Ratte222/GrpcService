@@ -1,6 +1,7 @@
 ﻿syntax = "proto3";
 
 import "google/protobuf/wrappers.proto";
+import "Protos/status.proto";
 
 option csharp_namespace = "GrpcService";
 
@@ -11,9 +12,9 @@ service Product {
   // Sends a greeting
   rpc GetProduct (ProductRequest) returns (ProductProto);
   rpc GetProducts (ProductsRequest) returns (ProductsReply);
-  rpc CreateProduct (NewProductProto) returns (StringReply);
-  rpc EditProduct (ProductProto) returns (StringReply);
-  rpc DeleteProduct (ProductRequest) returns (StringReply);
+  rpc CreateProduct (NewProductProto) returns (google.rpc.Status);
+  rpc EditProduct (ProductProto) returns (google.rpc.Status);
+  rpc DeleteProduct (ProductRequest) returns (google.rpc.Status);
 }
 
 // The request message containing the user's name.
@@ -47,11 +48,6 @@ message NewProductProto
   string Name = 1;
   string Description = 2;
   double Cost = 3;
-}
-
-message StringReply
-{
-	string Message = 1;
 }
 
 message PageResponse

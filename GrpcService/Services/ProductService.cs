@@ -12,7 +12,7 @@ using BLL.Helpers;
 using BLL.DTO.Product;
 using Microsoft.AspNetCore.Authorization;
 
-namespace GrpcService//.Services
+namespace GrpcService.Services
 {
     public class ProductService : Product.ProductBase
     {
@@ -58,22 +58,27 @@ namespace GrpcService//.Services
             return Task.FromResult(reply);
         }
 
-        public override Task<StringReply> CreateProduct(NewProductProto request, ServerCallContext context)
+        public override Task<Google.Rpc.Status> CreateProduct(NewProductProto request, ServerCallContext context)
         {
             _productService.Create(_mapper.Map<NewProductProto, model.Product>(request));
-            return Task.FromResult(new StringReply { Message = "Product created successfully" });
+            return Task.FromResult(new Google.Rpc.Status { Message = "Product created successfully",
+            Code = (int)StatusCode.OK});
         }
 
-        public override Task<StringReply> EditProduct(ProductProto request, ServerCallContext context)
+        public override Task<Google.Rpc.Status> EditProduct(ProductProto request, ServerCallContext context)
         {
             _productService.Update(_mapper.Map<ProductProto, model.Product>(request));
-            return Task.FromResult(new StringReply { Message = "Product updated successfully" });
+            return Task.FromResult(new Google.Rpc.Status { Message = "Product updated successfully",
+                Code = (int)StatusCode.OK
+            });
         }
 
-        public override Task<StringReply> DeleteProduct(ProductRequest request, ServerCallContext context)
+        public override Task<Google.Rpc.Status> DeleteProduct(ProductRequest request, ServerCallContext context)
         {
             _productService.Delete(request.ProductId);
-            return Task.FromResult(new StringReply { Message = "Product removed successfully"});
+            return Task.FromResult(new Google.Rpc.Status { Message = "Product removed successfully",
+                Code = (int)StatusCode.OK
+            });
         }
     }
 }
