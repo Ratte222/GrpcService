@@ -11,6 +11,9 @@ package product_photo;
 service ProductPhotoProtoService {  
     rpc GetPhoto(GetPhotoRequest) returns (stream file.ChunkMsg);
     rpc AddPhoto(stream AddPhotoRequest) returns (google.rpc.Status);
+    //https://dev.to/techschoolguru/upload-file-in-chunks-with-client-streaming-grpc-golang-4loc
+    //https://github.com/techschool/pcbook-java
+    //rpc UploadImage(stream UploadImageRequest) returns (UploadImageResponse) {};
 }  
 
 
@@ -24,3 +27,28 @@ message AddPhotoRequest
     file.ChunkMsg ChungMsg = 1;
     int64 ProductId = 2;
 }
+
+message ProductPhotosProto
+{
+    int64 Id = 1;
+    string Name = 2;
+    int64 ProductId = 3;
+}
+/*
+message UploadImageRequest {
+  oneof data {
+    ImageInfo info = 1;
+    bytes chunk_data = 2;
+  };
+}
+
+message ImageInfo {
+  string product_id = 1;
+  string image_name = 2;
+}
+
+message UploadImageResponse {
+  string id = 1;
+  uint32 size = 2;
+}
+*/

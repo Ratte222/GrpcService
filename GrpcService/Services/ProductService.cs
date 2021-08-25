@@ -11,6 +11,7 @@ using BLL.Filters;
 using BLL.Helpers;
 using BLL.DTO.Product;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace GrpcService.Services
 {
@@ -51,7 +52,11 @@ namespace GrpcService.Services
                 FieldOrderBy = request.FieldOrderBy,
                 OrderByDescending = request.OrderByDescending == null ? false : true
             };
-            List<ProductProto> list = _mapper.ProjectTo<ProductProto>(_productService.GetAll()).ToList();
+            
+            //List <ProductProto> list = _mapper.ProjectTo<ProductProto>(_productService.GetAll()
+            //    .Include(photo=>photo.ProductPhotos)).ToList();
+            List<ProductProto> list = _mapper.Map<IEnumerable<model.Product>, List<ProductProto>>(
+                _productService.GetAll().Include(photo => photo.ProductPhotos));
             ProductsReply reply = new ProductsReply();
             reply.PageResponse = _mapper.Map<PageResponse<model.Product>, PageResponse>(pageResponse);
             reply.Products.AddRange(list);

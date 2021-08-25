@@ -10,7 +10,7 @@ namespace DAL.EF
     {
         public static void Initialize(AppDBContext db, UserManager<User> userManager)
         {
-            if(!db.OrderLines.Any() || !db.OrderLines.Any())
+            if(!db.Products.Any() || !db.OrderLines.Any())
             {
                 db.Products.Add(new Product()
                 {
